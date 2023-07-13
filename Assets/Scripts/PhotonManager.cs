@@ -8,25 +8,40 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 {
   public static PhotonManager photonMg;
   public string playerName;
+  // public string roomName;
   void Awake()
   {
     photonMg = this;
-    DontDestroyOnLoad(photonMg);
+    DontDestroyOnLoad(this);
+  }
+
+  //連接伺服器
+  public void Connect()
+  {
+    PhotonNetwork.ConnectUsingSettings();
   }
 
   public override void OnConnectedToMaster()
   {
     PhotonNetwork.NickName = playerName;
-    PhotonNetwork.JoinLobby();
+    LoadScene(1);
+  }
+  //創建房間
+  public void ButtonCreateRoom(string roomName)
+  {
+    PhotonNetwork.CreateRoom(roomName);
+  }
+  public override void OnJoinedRoom()
+  {
+    PhotonNetwork.AutomaticallySyncScene = true;
+    LoadScene(2);
   }
 
-  public override void OnJoinedLobby()
+  public void LoadScene(int index)
   {
-    SceneManager.LoadScene(1);
+    SceneManager.LoadScene(index);
+
   }
-  public void Connect()
-  {
-    PhotonNetwork.ConnectUsingSettings();
-  }
+
 
 }
