@@ -1,25 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+  PhotonView pv;
   public float speed;
   Rigidbody2D rb;
-  // Start is called before the first frame update
+  public bool isRun;
   void Start()
   {
+    pv = GetComponent<PhotonView>();
     rb = GetComponent<Rigidbody2D>();
   }
 
-  // Update is called once per frame
   void Update()
   {
-
+    if (rb.velocity != Vector2.zero)
+    {
+      isRun = true;
+    }
+    else
+    {
+      isRun = false;
+    }
   }
   void FixedUpdate()
   {
-    Movement();
+    if (pv.IsMine)
+    {
+
+      Movement();
+    }
   }
 
   void Movement()
@@ -27,6 +40,10 @@ public class PlayerMovement : MonoBehaviour
     float hDir = Input.GetAxisRaw("Horizontal");
     float vDir = Input.GetAxisRaw("Vertical");
     rb.velocity = new Vector2(hDir * speed * Time.fixedDeltaTime, vDir * speed * Time.fixedDeltaTime);
+    if (hDir != 0)
+    {
+      transform.localScale = new Vector3(-hDir, 1, 1);
+    }
     rb.velocity.Normalize();
   }
 }
