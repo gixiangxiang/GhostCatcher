@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
   }
   void FixedUpdate()
   {
-    if (pv.IsMine)
+    if (pv.IsMine && GameSceneManager.gM.canMove)
     {
 
       Movement();
